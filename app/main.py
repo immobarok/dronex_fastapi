@@ -6,9 +6,7 @@ from app.api.v1.api import api_router
 from app.database.session import engine
 from app.database.base import Base
 
-# Note: In a real production environment, you should use Alembic for migrations 
-# instead of Base.metadata.create_all()
-Base.metadata.create_all(bind=engine)
+# Automatic table creation removed in favor of Alembic migrations
 
 app = FastAPI(title=settings.PROJECT_NAME)
 
