@@ -2,5 +2,5 @@
 # imported by Alembic
 from app.database.base_class import Base
 from app.models.user import User
-
-# Import other models here when you create them
+from app.models.product import Category, Product, ProductSpecification, ProductInclude, ProductSupportFeature, ProductRatingBreakdown
+from app.models.order import Coupon, Cart, CartItem, Order, OrderItem

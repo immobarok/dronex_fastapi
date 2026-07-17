@@ -17,6 +17,9 @@ class User(Base):
     
     reset_token_expires = Column(DateTime, nullable=True)
     
+    # Stripe
+    stripe_customer_id = Column(String, unique=True, index=True, nullable=True)
+    
     created_at = Column(DateTime, server_default=func.now())
     updated_at = Column(DateTime, onupdate=func.now(), server_default=func.now())
 
