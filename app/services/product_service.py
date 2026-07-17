@@ -37,3 +37,11 @@ class ProductService:
     @staticmethod
     def get_all_products(db: Session, skip: int = 0, limit: int = 100):
         return ProductRepository.get_all(db, skip=skip, limit=limit)
+    
+    @staticmethod
+    def get_product_by_id(db:Session,id:int):
+        return ProductRepository.get_by_id(db,id)
+    
+    @staticmethod
+    def get_product_by_slug(db:Session,slug:str):
+        return ProductRepository.get_by_slug(db,slug)

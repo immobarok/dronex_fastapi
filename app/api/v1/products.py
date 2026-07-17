@@ -37,3 +37,23 @@ def get_all_products(skip: int = 0, limit: int = 100, db: Session = Depends(get_
         message="All products fetched successfully",
         data=all_products
     )
+
+from fastapi import HTTPException
+
+@router.get("/{identifier}", response_model=StandardResponse[ProductResponse])
+def get_product(identifier: str, db: Session = Depends(get_db)):
+    # If the string is purely numbers, look it up by ID
+    if identifier.isdigit():
+        product = ProductService.get_product_by_id(db, int(identifier))
+    # Otherwise, look it up by slug
+    else:
+        product = ProductService.get_product_by_slug(db, identifier)
+        
+    if not product:
+        raise HTTPException(status_code=404, detail="Product not found")
+        
+    return StandardResponse(
+        success=True,
+        message="Product fetched successfully",
+        data=product
+    )
