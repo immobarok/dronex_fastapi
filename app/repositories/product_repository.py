@@ -7,3 +7,7 @@ class ProductRepository:
         db.commit()
         db.refresh(db_product)
         return db_product
+
+    @staticmethod
+    def get_all(db: Session, skip: int = 0, limit: int = 100):
+        return db.query(Product).offset(skip).limit(limit).all()

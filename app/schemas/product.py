@@ -8,7 +8,7 @@ class ProductSpecificationCreate(BaseModel):
     value:str
 
 class ProductIncludeCreate(BaseModel):
-    name:str
+    item_name: str
 
 class ProductCreate(BaseModel):
     category_id: int
@@ -27,3 +27,9 @@ class ProductCreate(BaseModel):
     main_image_url: Optional[str] = None
     specifications: List[ProductSpecificationCreate] = []
     includes: List[ProductIncludeCreate] = []
+
+class ProductResponse(ProductCreate):
+    id: int
+    
+    # This tells Pydantic to read data even if it is not a dict, but an ORM model
+    model_config = {"from_attributes": True}

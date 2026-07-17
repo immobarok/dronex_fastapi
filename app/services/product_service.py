@@ -29,7 +29,11 @@ class ProductService:
             db_product.specifications.append(ProductSpecification(**spec.model_dump()))
             
         for item in product_in.includes:
-            db_product.includes.append(ProductInclude(item_name=item.name))
+            db_product.includes.append(ProductInclude(item_name=item.item_name))
             
         # Hand it to the Repository to save!
         return ProductRepository.create(db, db_product)
+
+    @staticmethod
+    def get_all_products(db: Session, skip: int = 0, limit: int = 100):
+        return ProductRepository.get_all(db, skip=skip, limit=limit)
