@@ -1,5 +1,6 @@
 from sqlalchemy.orm import Session
-from app.models.product import Product
+from app.models.product import Product, ProductSpecification, ProductInclude
+
 class ProductRepository:
     @staticmethod
     def create(db:Session,db_product:Product)-> Product:
@@ -37,7 +38,20 @@ class ProductRepository:
             if not product:
                 return None
                 
-            # 2. Update only the fields that were provided
+            # Handle Nested Relationships explicitly (delete old, insert new)
+            if "specifications" in update_data:
+                db.query(ProductSpecification).filter(ProductSpecification.product_id == id).delete()
+                for spec in update_data["specifications"]:
+                    product.specifications.append(ProductSpecification(**spec))
+                del update_data["specifications"]
+                
+            if "includes" in update_data:
+                db.query(ProductInclude).filter(ProductInclude.product_id == id).delete()
+                for item in update_data["includes"]:
+                    product.includes.append(ProductInclude(**item))
+                del update_data["includes"]
+                
+            # 2. Update the remaining simple fields
             for key, value in update_data.items():
                 setattr(product, key, value)
                 

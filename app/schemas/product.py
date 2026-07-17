@@ -43,9 +43,9 @@ class ProductUpdate(BaseModel):
     flight_time_min: Optional[Decimal] = None
     tags: Optional[List[str]] = None
     main_image_url: Optional[str] = None
+    specifications: Optional[List[ProductSpecificationCreate]] = None
+    includes: Optional[List[ProductIncludeCreate]] = None
 
 class ProductResponse(ProductCreate):
     id: int
-    
-    # This tells Pydantic to read data even if it is not a dict, but an ORM model
     model_config = {"from_attributes": True}
