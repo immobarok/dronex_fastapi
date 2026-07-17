@@ -45,3 +45,12 @@ class ProductService:
     @staticmethod
     def get_product_by_slug(db:Session,slug:str):
         return ProductRepository.get_by_slug(db,slug)
+
+    @staticmethod
+    def delete_single_product(db:Session,id:int):
+        return ProductRepository.delete_single_product(db,id)
+
+    @staticmethod
+    def update_single_product(db:Session, id:int, product_in):
+        update_data = product_in.model_dump(exclude_unset=True)
+        return ProductRepository.update_single_product(db, id, update_data)

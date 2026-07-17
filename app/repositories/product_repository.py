@@ -19,3 +19,32 @@ class ProductRepository:
     @staticmethod
     def get_by_slug(db: Session, slug: str):
         return db.query(Product).filter(Product.slug == slug).first()
+
+    @staticmethod
+    def delete_single_product(db:Session,id:int):
+        try:
+            db.query(Product).filter(Product.id == id).delete()
+            db.commit()
+            return True
+        except:
+            return False
+
+    @staticmethod
+    def update_single_product(db:Session, id:int, update_data: dict):
+        try:
+            # 1. Fetch the existing product
+            product = db.query(Product).filter(Product.id == id).first()
+            if not product:
+                return None
+                
+            # 2. Update only the fields that were provided
+            for key, value in update_data.items():
+                setattr(product, key, value)
+                
+            # 3. Save to database
+            db.commit()
+            db.refresh(product)
+            return product
+        except Exception as e:
+            db.rollback()
+            return None

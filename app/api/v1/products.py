@@ -1,3 +1,4 @@
+from app.schemas.product import ProductUpdate
 from app.repositories.product_repository import ProductRepository
 from app.services.product_service import ProductService
 from app.api.deps import get_current_admin_user
@@ -55,5 +56,31 @@ def get_product(identifier: str, db: Session = Depends(get_db)):
     return StandardResponse(
         success=True,
         message="Product fetched successfully",
+        data=product
+    )
+
+#delete a product 
+@router.delete("/{id}",response_model=StandardResponse, 
+    dependencies=[Depends(get_current_admin_user)] )
+def delete_product(id:int,db:Session=Depends(get_db)):
+    success = ProductService.delete_single_product(db, id)
+    if not success:
+        raise HTTPException(status_code=404, detail="Product not found")
+    return StandardResponse(
+        success=True,
+        message="Product deleted successfully",
+        data=None
+    )
+
+
+@router.patch("/{id}", response_model=StandardResponse[ProductResponse], 
+    dependencies=[Depends(get_current_admin_user)] )
+def update_product(id:int, product_in: ProductUpdate, db:Session=Depends(get_db)):
+    product = ProductService.update_single_product(db, id, product_in) 
+    if not product:
+        raise HTTPException(status_code=404, detail="Product not found or update failed")
+    return StandardResponse(
+        success=True,
+        message="Product updated successfully",
         data=product
     )

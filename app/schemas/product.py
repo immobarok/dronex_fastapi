@@ -28,6 +28,22 @@ class ProductCreate(BaseModel):
     specifications: List[ProductSpecificationCreate] = []
     includes: List[ProductIncludeCreate] = []
 
+class ProductUpdate(BaseModel):
+    category_id: Optional[int] = None
+    name: Optional[str] = None
+    slug: Optional[str] = None
+    sku: Optional[str] = None
+    badge: Optional[str] = None
+    short_description: Optional[str] = None
+    long_description: Optional[str] = None
+    price: Optional[Decimal] = None
+    stock_quantity: Optional[int] = None
+    is_ready_stock: Optional[bool] = None
+    range_km: Optional[Decimal] = None
+    flight_time_min: Optional[Decimal] = None
+    tags: Optional[List[str]] = None
+    main_image_url: Optional[str] = None
+
 class ProductResponse(ProductCreate):
     id: int
     
