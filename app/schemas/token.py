@@ -1,3 +1,4 @@
+from pydantic import EmailStr
 from pydantic import BaseModel
 from typing import Optional
 from app.schemas.user import UserResponse
@@ -18,3 +19,14 @@ class LoginData(BaseModel):
 class LoginRequest(BaseModel):
     email: str
     password: str
+
+class ForgotPasswordRequest(BaseModel):
+    email:EmailStr
+
+class VerifyOTPRequest(BaseModel):
+    email:EmailStr
+    otp:str
+class ResetPasswordRequest(BaseModel):
+    token:str
+    new_password:str
+    
