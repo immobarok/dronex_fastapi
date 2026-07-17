@@ -19,3 +19,12 @@ class User(Base):
     
     created_at = Column(DateTime, server_default=func.now())
     updated_at = Column(DateTime, onupdate=func.now(), server_default=func.now())
+
+    #Cart-address
+    shipping_address = Column(String, nullable=True)
+    billing_address = Column(String, nullable=True)
+    city=Column(String, nullable=True)
+    state=Column(String, nullable=True)
+    country=Column(String, nullable=True)
+    postal_code=Column(String, nullable=True)
+    
