@@ -19,7 +19,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Only include the master API router here! Clean and professional.
 app.include_router(api_router, prefix=settings.API_V1_STR)
 
 @app.get("/")
