@@ -10,7 +10,7 @@ from app.schemas.response import StandardResponse
 
 router = APIRouter()
 
-@router.post("/", response_model=StandardResponse[UserResponse])
+@router.post("", response_model=StandardResponse[UserResponse])
 def create_user(user: UserCreate, db: Session = Depends(get_db)):
     """
     Create a new user securely. All business logic is delegated to the Service Layer.
@@ -22,7 +22,7 @@ def create_user(user: UserCreate, db: Session = Depends(get_db)):
         data=new_user
     )
 
-@router.get("/", response_model=List[UserResponse])
+@router.get("", response_model=List[UserResponse])
 def read_users(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
     """
     Retrieve users. Logic is delegated to the Service Layer.

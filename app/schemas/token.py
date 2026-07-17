@@ -14,3 +14,7 @@ class LoginData(BaseModel):
     refresh_token: str
     token_type: str
     user: UserResponse
+
+class LoginRequest(BaseModel):
+    email: str
+    password: str

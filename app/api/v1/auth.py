@@ -5,17 +5,15 @@ from sqlalchemy.orm import Session
 
 from app.api.deps import get_db
 from app.core.config import settings
-from app.core.security import create_access_token
+from app.core.security import create_access_token, create_refresh_token
 from app.services.auth_service import AuthService
-from app.schemas.token import Token
+from app.schemas.token import Token, LoginData, LoginRequest
+from app.schemas.response import StandardResponse
 
 router = APIRouter()
 
 @router.post("/login/access-token", response_model=Token)
 def login_access_token(db: Session = Depends(get_db), form_data: OAuth2PasswordRequestForm = Depends()):
-    """
-    OAuth2 compatible token login, get an access token for future requests
-    """
     user = AuthService.authenticate_user(db, email=form_data.username, password=form_data.password)
     if not user:
         raise HTTPException(status_code=400, detail="Incorrect email or password")
@@ -28,20 +26,9 @@ def login_access_token(db: Session = Depends(get_db), form_data: OAuth2PasswordR
     )
     return {"access_token": access_token, "token_type": "bearer"}
 
-from pydantic import BaseModel
-from app.schemas.response import StandardResponse
-from app.schemas.token import LoginData
-from app.core.security import create_refresh_token
-
-class LoginRequest(BaseModel):
-    email: str
-    password: str
 
 @router.post("/login", response_model=StandardResponse[LoginData])
 def login(login_req: LoginRequest, db: Session = Depends(get_db)):
-    """
-    Standard JSON login endpoint returning custom nested response for frontend applications.
-    """
     user = AuthService.authenticate_user(db, email=login_req.email, password=login_req.password)
     if not user:
         raise HTTPException(status_code=400, detail="Incorrect email or password")
