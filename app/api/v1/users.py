@@ -1,3 +1,4 @@
+from app.schemas.user import UserUpdate
 from app.api.deps import get_current_user
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
@@ -37,3 +38,23 @@ def get_user_me(current_user = Depends(get_current_user)):
         message="Profile fetched successfully",
         data=current_user
     )
+
+
+@router.patch("/me", response_model=StandardResponse[UserResponse])
+def update_user_me(
+    user_update:UserUpdate,
+    current_user = Depends(get_current_user),
+    db:Session = Depends(get_db)
+):
+    update_data = user_update.model_dump(exclude_unset=True)
+
+    for key, value in update_data.items():
+        setattr(current_user, key, value)
+    db.commit()
+    db.refresh(current_user)
+    return StandardResponse(
+        success=True,
+        message="Profile updated successfully",
+        data=current_user
+    )
+    
